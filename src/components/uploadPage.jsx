@@ -52,6 +52,23 @@ export const UploadPage = () => {
     };
 
     console.log('Submission Data:', JSON.stringify(submissionData, null, 2));
+
+    //backend request pending
+  //   useEffect(() => {
+  //     const requestOptions = {
+  //         method: 'PUT',
+  //         body: JSON.stringify({supplier_id : submissionData.supplierId,
+  //           metric : submissionData.metric,
+  //           date_recorded : submissionData.date_recorded,
+  //           result : submissionData.result,
+  //           status : submissionData.status
+  //     })};
+
+  //     fetch('string', requestOptions)
+  //         .then(response => response.json())
+  //         .then(data => setPostId(data.id));
+  //     // data should be added to backend
+  // }, []);
     
     // Reset form
     setFormData({
