@@ -25,7 +25,37 @@ export const NewSupplier = () => {
 
     // backend put request pending
     // Log the JSON to console
+
+    function sendBackendPutSupplierRequist(){
+      const date = new Date();
+
+      let day = date.getDate();
+      let month = date.getMonth() + 1;
+      let year = date.getFullYear();
+
+      let currentDate = `${day}-${month}-${year}`;
+
+        const requestOptions = {
+        method: 'POST',
+        // headers: { 'Content-Type': 'application/json' },
+        body: { name : formDataJSON.name ,
+                country : formDataJSON.country,
+                contract_terms : {"delivaryTime" : formDataJSON.deliveryTime,
+                                  "discount": formDataJSON.discount,
+                                  "qualityTerms": formDataJSON.qualityStandard
+                },
+                compcompliance_score:100,
+                last_audit:currentDate
+         }
+      };
+
+      fetch('string', requestOptions)
+        .then(response => response.json())
+        .then(data => setPostId(data.id));
+
+    }
     console.log('Form Data JSON:', formDataJSON);
+    sendBackendPutSupplierRequist()
     
     // Optional: Clear the form after submission
     setFormData({

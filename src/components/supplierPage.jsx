@@ -45,6 +45,14 @@ export const SupplierPage = ({setCurrentPage}) => {
   const [searchId, setSearchId] = useState('');
   
   // backend request pending
+  useEffect(() => {
+    async function getAllSuppliers() {
+      const response = await fetch('string');
+      const data = await response.json();
+      // set suppliers array to this data
+  }
+  }, []);
+  
   const suppliers = [
     {
       name: "John Doe",
