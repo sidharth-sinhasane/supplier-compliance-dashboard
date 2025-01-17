@@ -3,31 +3,12 @@ import React, { useState } from 'react';
 export const UploadPage = () => {
   const [formData, setFormData] = useState({
     supplierId: '',
-    qualityRating: 0,
+    metric: 'delivery', // default to delivery
     orderDate: '',
     deliveryDate: '',
-    deliveryCity: ''
+    deliveryCity: '',
+    qualityResult: 'pass', // for quality metric
   });
-
-  // Star Rating Component
-  const StarRating = ({ rating, onRatingChange }) => {
-    return (
-      <div className="flex gap-2">
-        {[1, 2, 3, 4, 5].map((star) => (
-          <button
-            key={star}
-            type="button"
-            onClick={() => onRatingChange(star)}
-            className={`text-2xl ${
-              star <= rating ? 'text-yellow-400' : 'text-gray-300'
-            }`}
-          >
-            ★
-          </button>
-        ))}
-      </div>
-    );
-  };
 
   const calculateDeliveryTime = (orderDate, deliveryDate) => {
     const start = new Date(orderDate);
@@ -37,27 +18,49 @@ export const UploadPage = () => {
     return diffDays;
   };
 
+  const determineDeliveryStatus = (deliveryTime) => {
+    // Example threshold of 7 days for compliance
+    return deliveryTime <= 7 ? 'compliant' : 'non-compliant';
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    const deliveryTime = calculateDeliveryTime(formData.orderDate, formData.deliveryDate);
-    
-    const complianceData = {
-      supplierId: formData.supplierId,
-      qualityStandard: formData.qualityRating,
-      deliveryTime: deliveryTime,
-      deliveryCity: formData.deliveryCity
+    const currentDate = new Date().toISOString().split('T')[0];
+    let result, status;
+
+    if (formData.metric === 'delivery') {
+      result = calculateDeliveryTime(formData.orderDate, formData.deliveryDate);
+      status = determineDeliveryStatus(result);
+    } else {
+      result = formData.qualityResult === 'pass' ? 1 : 0;
+      status = formData.qualityResult;
+    }
+
+    const submissionData = {
+      metric: formData.metric,
+      date_recorded: currentDate,
+      result: result,
+      status: status,
+      supplierId: parseInt(formData.supplierId),
+      // Additional data for reference
+      additionalInfo: formData.metric === 'delivery' ? {
+        orderDate: formData.orderDate,
+        deliveryDate: formData.deliveryDate,
+        deliveryCity: formData.deliveryCity
+      } : {}
     };
 
-    console.log('Compliance Data:', complianceData);
+    console.log('Submission Data:', JSON.stringify(submissionData, null, 2));
     
-    // Clear form after submission
+    // Reset form
     setFormData({
       supplierId: '',
-      qualityRating: 0,
+      metric: 'delivery',
       orderDate: '',
       deliveryDate: '',
-      deliveryCity: ''
+      deliveryCity: '',
+      qualityResult: 'pass'
     });
   };
 
@@ -86,6 +89,7 @@ export const UploadPage = () => {
             <input
               id="supplierId"
               name="supplierId"
+              type="number"
               value={formData.supplierId}
               onChange={handleInputChange}
               placeholder="Enter supplier ID"
@@ -94,66 +98,93 @@ export const UploadPage = () => {
             />
           </div>
 
-          {/* Quality Rating Field */}
+          {/* Metric Selection */}
           <div>
-            <label className={labelClass}>
-              Quality Standard Rating
+            <label htmlFor="metric" className={labelClass}>
+              Metric Type
             </label>
-            <StarRating 
-              rating={formData.qualityRating}
-              onRatingChange={(rating) => 
-                setFormData(prev => ({ ...prev, qualityRating: rating }))
-              }
-            />
-          </div>
-
-          {/* Order Date Field */}
-          <div>
-            <label htmlFor="orderDate" className={labelClass}>
-              Order Date
-            </label>
-            <input
-              id="orderDate"
-              name="orderDate"
-              type="date"
-              value={formData.orderDate}
+            <select
+              id="metric"
+              name="metric"
+              value={formData.metric}
               onChange={handleInputChange}
               className={inputClass}
               required
-            />
+            >
+              <option value="delivery">Delivery Time</option>
+              <option value="quality">Quality</option>
+            </select>
           </div>
 
-          {/* Delivery Date Field */}
-          <div>
-            <label htmlFor="deliveryDate" className={labelClass}>
-              Delivery Date
-            </label>
-            <input
-              id="deliveryDate"
-              name="deliveryDate"
-              type="date"
-              value={formData.deliveryDate}
-              onChange={handleInputChange}
-              className={inputClass}
-              required
-            />
-          </div>
+          {formData.metric === 'delivery' ? (
+            <>
+              {/* Order Date Field */}
+              <div>
+                <label htmlFor="orderDate" className={labelClass}>
+                  Order Date
+                </label>
+                <input
+                  id="orderDate"
+                  name="orderDate"
+                  type="date"
+                  value={formData.orderDate}
+                  onChange={handleInputChange}
+                  className={inputClass}
+                  required
+                />
+              </div>
 
-          {/* Delivery City Field */}
-          <div>
-            <label htmlFor="deliveryCity" className={labelClass}>
-              Delivery City
-            </label>
-            <input
-              id="deliveryCity"
-              name="deliveryCity"
-              value={formData.deliveryCity}
-              onChange={handleInputChange}
-              placeholder="Enter delivery city"
-              className={inputClass}
-              required
-            />
-          </div>
+              {/* Delivery Date Field */}
+              <div>
+                <label htmlFor="deliveryDate" className={labelClass}>
+                  Delivery Date
+                </label>
+                <input
+                  id="deliveryDate"
+                  name="deliveryDate"
+                  type="date"
+                  value={formData.deliveryDate}
+                  onChange={handleInputChange}
+                  className={inputClass}
+                  required
+                />
+              </div>
+
+              {/* Delivery City Field */}
+              <div>
+                <label htmlFor="deliveryCity" className={labelClass}>
+                  Delivery City
+                </label>
+                <input
+                  id="deliveryCity"
+                  name="deliveryCity"
+                  value={formData.deliveryCity}
+                  onChange={handleInputChange}
+                  placeholder="Enter delivery city"
+                  className={inputClass}
+                  required
+                />
+              </div>
+            </>
+          ) : (
+            /* Quality Result Field */
+            <div>
+              <label htmlFor="qualityResult" className={labelClass}>
+                Quality Result
+              </label>
+              <select
+                id="qualityResult"
+                name="qualityResult"
+                value={formData.qualityResult}
+                onChange={handleInputChange}
+                className={inputClass}
+                required
+              >
+                <option value="pass">Pass</option>
+                <option value="fail">Fail</option>
+              </select>
+            </div>
+          )}
 
           {/* Submit Button */}
           <button
@@ -167,3 +198,4 @@ export const UploadPage = () => {
     </div>
   );
 };
+
