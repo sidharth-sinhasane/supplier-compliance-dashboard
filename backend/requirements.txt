@@ -1,27 +1,30 @@
 accelerate==1.2.1
-annotated-types==0.7.0
-anyio==4.8.0
-bitsandbytes==0.45.0
-certifi==2024.12.14
-charset-normalizer==3.4.1
-click==8.1.8
-distro==1.9.0
-exceptiongroup==1.2.2
-fastapi==0.115.6
+annotated-types @ file:///work/perseverance-python-buildout/croot/annotated-types_1728386958747/work
+anyio @ file:///io/perseverance-python-buildout/croot/anyio_1731700736723/work
+bitsandbytes==0.42.0
+boto3 @ file:///work/perseverance-python-buildout/croot/boto3_1728395902889/work
+botocore @ file:///work/perseverance-python-buildout/croot/botocore_1728392032130/work
+Brotli @ file:///croot/brotli-split_1736182456865/work
+certifi @ file:///io/buildout/croot/certifi_1735842370795/work/certifi
+charset-normalizer @ file:///croot/charset-normalizer_1721748349566/work
+click @ file:///work/perseverance-python-buildout/croot/click_1728387069202/work
+fastapi @ file:///io/buildout/croot/fastapi_1735845387481/work
 filelock==3.16.1
 fsspec==2024.12.0
-greenlet==3.1.1
-h11==0.14.0
-httpcore==1.0.7
-httpx==0.28.1
+greenlet @ file:///croot/greenlet_1733860072744/work
+h11 @ file:///work/perseverance-python-buildout/croot/h11_1728386593025/work
 huggingface-hub==0.27.1
-idna==3.10
+idna @ file:///work/perseverance-python-buildout/croot/idna_1728385935861/work
 Jinja2==3.1.5
-jiter==0.8.2
+jmespath @ file:///work/perseverance-python-buildout/croot/jmespath_1728388559617/work
+joblib @ file:///work/perseverance-python-buildout/croot/joblib_1728392999985/work
 MarkupSafe==3.0.2
+mkl-service==2.4.0
+mkl_fft @ file:///io/mkl313/mkl_fft_1730824109137/work
+mkl_random @ file:///io/mkl313/mkl_random_1730823916628/work
 mpmath==1.3.0
 networkx==3.4.2
-numpy==2.2.1
+numpy @ file:///croot/numpy_and_numpy_base_1736500434252/work/dist/numpy-2.2.1-cp313-cp313-linux_x86_64.whl#sha256=0bf4a7adf3743a7d50ab1bbcd49e5fb31ec820e590c41eeab0d32a0235e0029d
 nvidia-cublas-cu12==12.4.5.8
 nvidia-cuda-cupti-cu12==12.4.127
 nvidia-cuda-nvrtc-cu12==12.4.127
@@ -34,27 +37,31 @@ nvidia-cusparse-cu12==12.3.1.170
 nvidia-nccl-cu12==2.21.5
 nvidia-nvjitlink-cu12==12.4.127
 nvidia-nvtx-cu12==12.4.127
-openai==1.59.7
 packaging==24.2
 psutil==6.1.1
 psycopg2-binary==2.9.10
-pydantic==2.10.5
-pydantic_core==2.27.2
-python-dotenv==1.0.1
-python-multipart==0.0.20
+pydantic==1.10.21
+pydantic_core @ file:///croot/pydantic-core_1734726052986/work
+PySocks @ file:///work/perseverance-python-buildout/croot/pysocks_1728386193338/work
+python-dateutil @ file:///work/perseverance-python-buildout/croot/python-dateutil_1728385355105/work
 PyYAML==6.0.2
-regex==2024.11.6
-requests==2.32.3
+regex @ file:///croot/regex_1736540786412/work
+requests @ file:///croot/requests_1730999120400/work
+s3transfer @ file:///work/perseverance-python-buildout/croot/s3transfer_1728395148225/work
+sacremoses @ file:///tmp/build/80754af9/sacremoses_1633107328213/work
 safetensors==0.5.2
-sniffio==1.3.1
-SQLAlchemy==2.0.37
-starlette==0.41.3
+scipy==1.15.1
+setuptools==72.1.0
+six @ file:///tmp/build/80754af9/six_1644875935023/work
+sniffio @ file:///work/perseverance-python-buildout/croot/sniffio_1728386342155/work
+SQLAlchemy @ file:///croot/sqlalchemy_1736565039440/work
+starlette @ file:///io/perseverance-python-buildout/croot/starlette-recipe_1731704598518/work
 sympy==1.13.1
 tokenizers==0.21.0
 torch==2.5.1
-tqdm==4.67.1
+tqdm @ file:///io/buildout/croot/tqdm_1735843350462/work
 transformers==4.48.0
-triton==3.1.0
-typing_extensions==4.12.2
-urllib3==2.3.0
-uvicorn==0.34.0
+typing_extensions @ file:///croot/typing_extensions_1734714854207/work
+urllib3 @ file:///work/perseverance-python-buildout/croot/urllib3_1728386864107/work
+uvicorn @ file:///croot/uvicorn-split_1732660726596/work
+wheel==0.44.0

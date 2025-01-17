@@ -3,10 +3,15 @@ from .models import Supplier, ComplianceRecord
 from .schemas import SupplierCreate, ComplianceRecordCreate
 from typing import List
 from datetime import date
-from .ai_service import analyze_compliance, generate_improvement_suggestions
+from .ai_service import analyze_compliance_data, generate_compliance_suggestions
 
 def get_suppliers(db: Session, skip: int = 0, limit: int = 100) -> List[Supplier]:
-    return db.query(Supplier).offset(skip).limit(limit).all()
+      return db.query(Supplier).filter(
+        Supplier.name.isnot(None),
+        Supplier.country.isnot(None),
+        Supplier.compliance_score.isnot(None),
+        Supplier.last_audit.isnot(None)
+    ).offset(skip).limit(limit).all()
 
 def create_supplier(db: Session, supplier: SupplierCreate) -> Supplier:
     db_supplier = Supplier(**supplier.dict())
@@ -31,7 +36,7 @@ def create_compliance_record(db: Session, compliance_record: ComplianceRecordCre
     db.commit()
     
     # Analyze compliance using AI
-    analysis = analyze_compliance(db_record.dict())
+    analysis = analyze_compliance_data(db_record.dict())
     # Here you might want to store the analysis or update the record
     
     return db_record
@@ -49,7 +54,7 @@ def generate_insights(db: Session) -> List[dict]:
     insights = []
     for supplier in suppliers:
         compliance_history = db.query(ComplianceRecord).filter(ComplianceRecord.supplier_id == supplier.id).all()
-        suggestion = generate_improvement_suggestions(compliance_history)
+        suggestion = generate_compliance_suggestions(compliance_history)
         insights.append({
             "supplier_id": supplier.id,
             "suggestion": suggestion

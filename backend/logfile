@@ -1,0 +1,44 @@
+2025-01-16 23:30:03.778 EST [172321] LOG:  starting PostgreSQL 17.2 on x86_64-conda-linux-gnu, compiled by x86_64-conda-linux-gnu-cc (Anaconda gcc) 11.2.0, 64-bit
+2025-01-16 23:30:03.780 EST [172321] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-01-16 23:30:03.800 EST [172321] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2025-01-16 23:30:03.809 EST [172325] LOG:  database system was shut down at 2025-01-16 23:29:51 EST
+2025-01-16 23:30:03.822 EST [172321] LOG:  database system is ready to accept connections
+2025-01-16 23:30:54.258 EST [173209] FATAL:  database "mydatabase" does not exist
+2025-01-16 23:33:27.205 EST [174434] ERROR:  syntax error at or near "db" at character 8
+2025-01-16 23:33:27.205 EST [174434] STATEMENT:  create db supplier_compliance
+	;
+2025-01-16 23:33:47.844 EST [176112] FATAL:  database "sidharth" does not exist
+2025-01-16 23:35:03.908 EST [172323] LOG:  checkpoint starting: time
+2025-01-16 23:36:43.626 EST [172323] LOG:  checkpoint complete: wrote 998 buffers (6.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=99.663 s, sync=0.040 s, total=99.718 s; sync files=314, longest=0.002 s, average=0.001 s; distance=4719 kB, estimate=4719 kB; lsn=0/19D7540, redo lsn=0/19D74B0
+2025-01-17 00:08:11.789 EST [210462] ERROR:  permission denied for schema public at character 15
+2025-01-17 00:08:11.789 EST [210462] STATEMENT:  
+	CREATE TABLE suppliers (
+		id SERIAL NOT NULL, 
+		name VARCHAR, 
+		country VARCHAR, 
+		contract_terms VARCHAR, 
+		compliance_score INTEGER, 
+		last_audit DATE, 
+		PRIMARY KEY (id)
+	)
+	
+	
+2025-01-17 00:11:13.397 EST [213294] ERROR:  permission denied for database supplier_compliance
+2025-01-17 00:11:13.397 EST [213294] STATEMENT:  create schema dbmodel;
+2025-01-17 00:12:09.692 EST [213294] WARNING:  no privileges were granted for "supplier_compliance"
+2025-01-17 00:12:19.791 EST [213294] ERROR:  permission denied for database supplier_compliance
+2025-01-17 00:12:19.791 EST [213294] STATEMENT:  create schema dbmodel;
+2025-01-17 00:15:04.508 EST [172323] LOG:  checkpoint starting: time
+2025-01-17 00:15:05.556 EST [172323] LOG:  checkpoint complete: wrote 11 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=1.017 s, sync=0.005 s, total=1.061 s; sync files=9, longest=0.003 s, average=0.001 s; distance=3 kB, estimate=4247 kB; lsn=0/19D83F0, redo lsn=0/19D8398
+2025-01-17 00:20:04.656 EST [172323] LOG:  checkpoint starting: time
+2025-01-17 00:20:11.861 EST [172323] LOG:  checkpoint complete: wrote 72 buffers (0.4%); 0 WAL file(s) added, 0 removed, 0 recycled; write=7.173 s, sync=0.014 s, total=7.206 s; sync files=58, longest=0.005 s, average=0.001 s; distance=227 kB, estimate=3845 kB; lsn=0/1A11118, redo lsn=0/1A110C0
+2025-01-17 00:25:04.973 EST [172323] LOG:  checkpoint starting: time
+2025-01-17 00:25:05.700 EST [172323] LOG:  checkpoint complete: wrote 7 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.707 s, sync=0.004 s, total=0.728 s; sync files=5, longest=0.003 s, average=0.001 s; distance=16 kB, estimate=3462 kB; lsn=0/1A15188, redo lsn=0/1A15130
+2025-01-17 00:45:05.084 EST [172323] LOG:  checkpoint starting: time
+2025-01-17 00:45:06.423 EST [172323] LOG:  checkpoint complete: wrote 14 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=1.317 s, sync=0.005 s, total=1.339 s; sync files=11, longest=0.003 s, average=0.001 s; distance=1 kB, estimate=3116 kB; lsn=0/1A155B0, redo lsn=0/1A15558
+2025-01-17 00:50:05.523 EST [172323] LOG:  checkpoint starting: time
+2025-01-17 00:50:06.049 EST [172323] LOG:  checkpoint complete: wrote 6 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.509 s, sync=0.003 s, total=0.526 s; sync files=6, longest=0.003 s, average=0.001 s; distance=1 kB, estimate=2805 kB; lsn=0/1A159B0, redo lsn=0/1A15958
+2025-01-17 01:00:05.249 EST [172323] LOG:  checkpoint starting: time
+2025-01-17 01:00:05.796 EST [172323] LOG:  checkpoint complete: wrote 6 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.516 s, sync=0.004 s, total=0.548 s; sync files=6, longest=0.004 s, average=0.001 s; distance=1 kB, estimate=2524 kB; lsn=0/1A15E98, redo lsn=0/1A15E40
+2025-01-17 01:05:05.896 EST [172323] LOG:  checkpoint starting: time
+2025-01-17 01:05:06.423 EST [172323] LOG:  checkpoint complete: wrote 6 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.510 s, sync=0.003 s, total=0.527 s; sync files=6, longest=0.003 s, average=0.001 s; distance=1 kB, estimate=2272 kB; lsn=0/1A16638, redo lsn=0/1A165E0

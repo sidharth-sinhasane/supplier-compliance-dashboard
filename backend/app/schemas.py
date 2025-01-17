@@ -1,23 +1,7 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, Json
 from datetime import date
 from typing import List, Optional
-
-class SupplierBase(BaseModel):
-    name: str
-    country: str
-    contract_terms: dict
-    compliance_score: int = Field(..., ge=0, le=100)
-    last_audit: date
-
-class SupplierCreate(SupplierBase):
-    pass
-
-class Supplier(SupplierBase):
-    id: int
-    compliance_records: List["ComplianceRecord"] = []
-
-    class Config:
-        orm_mode = True
+from pydantic import BaseModel, ConfigDict
 
 class ComplianceRecordBase(BaseModel):
     metric: str
@@ -33,8 +17,31 @@ class ComplianceRecord(ComplianceRecordBase):
     supplier_id: int
 
     class Config:
-        orm_mode = True
+        orm_model = True  # Use this instead of orm_mode in Pydantic v2
 
+class SupplierBase(BaseModel):
+    name: str
+    country: str
+    contract_terms: Json
+    compliance_score: int = Field(..., ge=0, le=100)
+    last_audit: date
+    model_config = ConfigDict(orm_mode=True)
+
+class SupplierCreate(SupplierBase):
+    pass
+
+class Supplier(SupplierBase):
+    id: int
+    name: Optional[str] = None
+    country: Optional[str] = None
+    contract_terms: Optional[Json] = None
+    compliance_score: Optional[int] = None
+    last_audit: Optional[date] = None
+    class Config:
+        #from_attributes = True  # Use this instead of orm_mode in Pydantic v2
+        orm_mode = True
 class Insight(BaseModel):
     supplier_id: int
     suggestion: str
+
+Supplier.update_forward_refs()

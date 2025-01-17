@@ -3,20 +3,31 @@ from sqlalchemy.orm import Session
 from typing import List
 from . import models, schemas, crud
 from .database import engine, get_db
-import openai
+from .ai_service import analyze_compliance_data, generate_compliance_suggestions
+from typing import Dict
 
 models.Base.metadata.create_all(bind=engine)
+from fastapi.encoders import jsonable_encoder
+from pydantic import ValidationError
+
+
 
 app = FastAPI()
 
 @app.get("/suppliers", response_model=List[schemas.Supplier])
 def read_suppliers(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     suppliers = crud.get_suppliers(db, skip=skip, limit=limit)
-    return suppliers
+    try:
+        return [schemas.Supplier.from_orm(supplier) for supplier in suppliers]
+    except ValidationError as e:
+        print(f"Validation error: {e}")
+        return []
 
 @app.post("/suppliers", response_model=schemas.Supplier)
 def create_supplier(supplier: schemas.SupplierCreate, db: Session = Depends(get_db)):
-    return crud.create_supplier(db=db, supplier=supplier)
+    db_supplier = crud.create_supplier(db, supplier)
+    return jsonable_encoder(db_supplier)
+
 
 @app.get("/suppliers/{supplier_id}", response_model=schemas.Supplier)
 def read_supplier(supplier_id: int, db: Session = Depends(get_db)):
