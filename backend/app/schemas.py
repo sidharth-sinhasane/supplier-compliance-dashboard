@@ -17,7 +17,7 @@ class ComplianceRecord(ComplianceRecordBase):
     supplier_id: int
 
     class Config:
-        orm_model = True  # Use this instead of orm_mode in Pydantic v2
+        from_attributes = True  # Use this instead of orm_mode in Pydantic v2
 
 class SupplierBase(BaseModel):
     name: str
@@ -25,7 +25,7 @@ class SupplierBase(BaseModel):
     contract_terms: Json
     compliance_score: int = Field(..., ge=0, le=100)
     last_audit: date
-    model_config = ConfigDict(orm_mode=True)
+    model_config = ConfigDict(from_attributes=True)
 
 class SupplierCreate(SupplierBase):
     pass
@@ -39,7 +39,7 @@ class Supplier(SupplierBase):
     last_audit: Optional[date] = None
     class Config:
         #from_attributes = True  # Use this instead of orm_mode in Pydantic v2
-        orm_mode = True
+        from_attributes = True
 class Insight(BaseModel):
     supplier_id: int
     suggestion: str

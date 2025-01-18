@@ -6,6 +6,8 @@ from transformers import AutoTokenizer, pipeline
 from tqdm import tqdm
 import re
 import torch
+import json
+
 if torch.cuda.is_available():
     torch.cuda.set_device(0)
 else:
@@ -17,7 +19,7 @@ text_generator = pipeline(
         model=model_id,
         model_kwargs={
             "torch_dtype": torch.float16,
-            "quantization_config": {"load_in_4bit": True},
+            "quantization_config": {"load_in_8bit": True},
             "low_cpu_mem_usage": True,
         },
         device_map="auto"
@@ -33,52 +35,89 @@ def analyze_compliance_data(compliance_records: List[ComplianceRecord]) -> Dict[
     
     multi_line_string = '\n'.join(data_for_analysis)
 
-    system_prompt = f"""Analyze given compliance records for the supplier and identify patterns in non-compliance provide categorized issues (e.g., 'delivery delays', 'quality inconsistencies').results as a Python dictionary with categories as keys and counts as values."""
+    system_prompt = """I want you to analyze given compliance records for the supplier and identify patterns in non-compliance status. Provide categorized issues (e.g., 'delivery delays', 'quality inconsistencies') output as a json with categorized issues as keys and counts as values for those keys."""
     messages = [
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": multi_line_string}
-        ]
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": multi_line_string}
+    ]
     prompt = tokenizer.apply_chat_template(
-            messages,
-            tokenize=False,
-            add_generation_prompt=True
-        )
+        messages,
+        tokenize=False,
+        add_generation_prompt=True
+    )
     input_ids = tokenizer(prompt, return_tensors="pt").input_ids.to(device)
     outputs = model.generate(
-            input_ids=input_ids,  # Make sure input is on the correct device
-            max_new_tokens=500,
-            do_sample=True,
-            top_p=0.95,
-            temperature=0.6,
-        )
+        input_ids=input_ids,
+        max_new_tokens=500,
+        do_sample=True,
+        top_p=0.95,
+        temperature=0.6,
+    )
     response = outputs[0][input_ids.shape[-1]:]
     categorized_issues = tokenizer.decode(response, skip_special_tokens=True)
-    return categorized_issues
+    print(categorized_issues)
+    json_start = categorized_issues.find('{')
+    json_end = categorized_issues.rfind('}') + 1
+    json_output = categorized_issues[json_start:json_end]
+    categorized_issues_dict = eval(json_output)
+    return {k: int(v) for k, v in categorized_issues_dict.items()}
+    ''''
+    try:
+        categorized_issues_dict = eval(categorized_issues)
+        if not isinstance(categorized_issues_dict, dict):
+            raise ValueError("Output is not a valid dictionary")
+        return {k: int(v) for k, v in categorized_issues_dict.items()}
+    except:
+        return {"parsing_error": 1}'''
 
-def generate_compliance_suggestions(categorized_issues: Dict[str, int]) -> List[str]:
+def generate_compliance_suggestions(categorized_issues: Dict[str, int]) -> str:
+    system_prompt = "Based on the following categorized compliance issues, generate specific suggestions for improving supplier compliance. Provide a list of 3-5 actionable suggestions to improve compliance. Format the response as a JSON array of strings."
     
-    system_prompt = f"""Based on the following categorized compliance issues, generate specific suggestions for improving supplier compliance. Provide a list of 3-5 actionable suggestions to improve compliance."""
+    issues_str = ", ".join([f"{k}: {v}" for k, v in categorized_issues.items()])
+    
     messages = [
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": categorized_issues}
-        ]
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": issues_str}
+    ]
+    
     prompt = tokenizer.apply_chat_template(
-            messages,
-            tokenize=False,
-            add_generation_prompt=True
-        )
+        messages,
+        tokenize=False,
+        add_generation_prompt=True
+    )
+    
     input_ids = tokenizer(prompt, return_tensors="pt").input_ids.to(device)
+    
     outputs = model.generate(
-            input_ids=input_ids,  # Make sure input is on the correct device
-            max_new_tokens=500,
-            do_sample=True,
-            top_p=0.95,
-            temperature=0.6,
-        )
-    response = outputs[0][input_ids.shape[-1]:]
-    suggestions = response.strip().split('\n')
-    return [suggestion.strip('- ') for suggestion in suggestions if suggestion.strip()]
-
+        input_ids=input_ids,
+        max_new_tokens=500,
+        do_sample=True,
+        top_p=0.95,
+        temperature=0.6,
+    )
+    
+    response = tokenizer.decode(outputs[0][input_ids.shape[-1]:], skip_special_tokens=True)
+    print(response)
+    json_start = response.find('[')
+    json_end = response.rfind(']') + 1
+    suggestions = response[json_start:json_end]
+    insights = []
+    insights = [suggestion.strip() for suggestion in suggestions.split(",")]
+    print(insights)
+    '''
+    if json_start != -1 and json_end != -1:
+        suggestions = response[json_start:json_end]
+        try:
+            suggestions = json.loads(json_str)
+            if isinstance(suggestions, list) and 3 <= len(suggestions) <= 5:
+                return json.dumps(suggestions)
+        except json.JSONDecodeError:
+            pass
+    
+    # Fallback if JSON parsing fails or doesn't meet criteria
+    suggestions = [s.strip('- ') for s in response.split('\n') if s.strip()]
+    suggestions = suggestions[:min(5, max(3, len(suggestions)))]'''
+    return insights
 '''
 def assess_weather_impact(delivery_date: datetime, latitude: float, longitude: float) -> str:
     # This function would typically call a weather API to get historical weather data

@@ -60,7 +60,7 @@ sympy==1.13.1
 tokenizers==0.21.0
 torch==2.5.1
 tqdm @ file:///io/buildout/croot/tqdm_1735843350462/work
-transformers==4.48.0
+#transformers==4.48.0
 typing_extensions @ file:///croot/typing_extensions_1734714854207/work
 urllib3 @ file:///work/perseverance-python-buildout/croot/urllib3_1728386864107/work
 uvicorn @ file:///croot/uvicorn-split_1732660726596/work

@@ -1,93 +1,60 @@
 import React, { useState } from 'react';
+import { createSupplier } from '../api';
 
 export const NewSupplier = () => {
   const [formData, setFormData] = useState({
     name: '',
     country: '',
-    city: '',
-    deliveryTime: '',
-    discount: '',
-    qualityStandard: ''
+    compliance_score: 100,
+    contract_terms: {
+      delivery_time: '',
+      quality_standard: '',
+      discount_rate: ''
+    },
+    last_audit: new Date().toISOString().split('T')[0]
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Create a JSON object with the form data
-    const formDataJSON = {
-      name: formData.name,
-      country: formData.country,
-      city: formData.city,
-      deliveryTime: parseInt(formData.deliveryTime),
-      discount: parseFloat(formData.discount),
-      qualityStandard: formData.qualityStandard
-    };
-
-    // backend put request pending
-    // Log the JSON to console
-
-    // function sendBackendPutSupplierRequist(){
-    //   const date = new Date();
-
-    //   let day = date.getDate();
-    //   let month = date.getMonth() + 1;
-    //   let year = date.getFullYear();
-
-    //   let currentDate = `${day}-${month}-${year}`;
-
-    //     const requestOptions = {
-    //     method: 'POST',
-    //     // headers: { 'Content-Type': 'application/json' },
-    //     body: { name : formDataJSON.name ,
-    //             country : formDataJSON.country,
-    //             contract_terms : {"delivaryTime" : formDataJSON.deliveryTime,
-    //                               "discount": formDataJSON.discount,
-    //                               "qualityTerms": formDataJSON.qualityStandard
-    //             },
-    //             compcompliance_score:100,
-    //             last_audit:currentDate
-    //      }
-    //   };
-
-    //   fetch('string', requestOptions)
-    //     .then(response => response.json())
-    //     .then(data => setPostId(data.id));
-
-    // }
-    console.log('Form Data JSON:', formDataJSON);
-    // sendBackendPutSupplierRequist()
-    
-    // Optional: Clear the form after submission
-    setFormData({
-      name: '',
-      country: '',
-      city: '',
-      deliveryTime: '',
-      discount: '',
-      qualityStandard: ''
-    });
-
-    // Show an alert to confirm submission (optional)
-    // alert('Form submitted! Check the console for the JSON data.');
+    try {
+      const newSupplier = await createSupplier(formData);
+      console.log('New supplier created:', newSupplier);
+      // Handle success (e.g., show a success message, redirect)
+      alert('Supplier created successfully!');
+      
+      // Clear the form after submission
+      setFormData({
+        name: '',
+        country: '',
+        compliance_score: 100,
+        contract_terms: {
+          delivery_time: '',
+          quality_standard: '',
+          discount_rate: ''
+        },
+        last_audit: new Date().toISOString().split('T')[0]
+      });
+    } catch (error) {
+      console.error('Failed to create supplier:', error);
+      alert('Failed to create supplier. Please try again.');
+    }
   };
 
   const handleInputChange = (e) => {
-    let { name, value } = e.target;
-    
-    // Validation for discount (0-100)
-    if (name === 'discount') {
-      value = Math.min(Math.max(0, value), 100);
+    const { name, value } = e.target;
+    if (name.includes('.')) {
+      const [parent, child] = name.split('.');
+      setFormData(prev => ({
+        ...prev,
+        [parent]: {
+          ...prev[parent],
+          [child]: value
+        }
+      }));
+    } else {
+      setFormData(prev => ({ ...prev, [name]: value }));
     }
-    
-    // Validation for delivery time (positive numbers only)
-    if (name === 'deliveryTime') {
-      value = Math.max(0, value);
-    }
-
-    setFormData(prevData => ({
-      ...prevData,
-      [name]: value
-    }));
   };
 
   const inputClass = "w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500";
@@ -96,14 +63,11 @@ export const NewSupplier = () => {
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-50 p-4">
       <div className="w-full max-w-lg bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-2xl font-bold text-center mb-6">Upload Details</h2>
+        <h2 className="text-2xl font-bold text-center mb-6">Add New Supplier</h2>
         
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Name Field */}
           <div>
-            <label htmlFor="name" className={labelClass}>
-              Name
-            </label>
+            <label htmlFor="name" className={labelClass}>Name</label>
             <input
               id="name"
               name="name"
@@ -115,11 +79,8 @@ export const NewSupplier = () => {
             />
           </div>
 
-          {/* Country Field */}
           <div>
-            <label htmlFor="country" className={labelClass}>
-              Country
-            </label>
+            <label htmlFor="country" className={labelClass}>Country</label>
             <input
               id="country"
               name="country"
@@ -131,52 +92,30 @@ export const NewSupplier = () => {
             />
           </div>
 
-          {/* City Field */}
           <div>
-            <label htmlFor="city" className={labelClass}>
-              Delivery Location (City)
-            </label>
+            <label htmlFor="contract_terms.delivery_time" className={labelClass}>Delivery Time (Days)</label>
             <input
-              id="city"
-              name="city"
-              value={formData.city}
-              onChange={handleInputChange}
-              placeholder="Enter city"
-              className={inputClass}
-              required
-            />
-          </div>
-
-          {/* Delivery Time Field */}
-          <div>
-            <label htmlFor="deliveryTime" className={labelClass}>
-              Estimated Delivery Time (Days)
-            </label>
-            <input
-              id="deliveryTime"
-              name="deliveryTime"
+              id="contract_terms.delivery_time"
+              name="contract_terms.delivery_time"
               type="number"
-              value={formData.deliveryTime}
+              value={formData.contract_terms.delivery_time}
               onChange={handleInputChange}
-              placeholder="Enter number of days"
+              placeholder="Enter delivery time in days"
               min="0"
               className={inputClass}
               required
             />
           </div>
 
-          {/* Discount Field */}
           <div>
-            <label htmlFor="discount" className={labelClass}>
-              Discount Offered (%)
-            </label>
+            <label htmlFor="contract_terms.discount_rate" className={labelClass}>Discount Rate (%)</label>
             <input
-              id="discount"
-              name="discount"
+              id="contract_terms.discount_rate"
+              name="contract_terms.discount_rate"
               type="number"
-              value={formData.discount}
+              value={formData.contract_terms.discount_rate}
               onChange={handleInputChange}
-              placeholder="Enter discount percentage"
+              placeholder="Enter discount rate"
               min="0"
               max="100"
               className={inputClass}
@@ -184,15 +123,12 @@ export const NewSupplier = () => {
             />
           </div>
 
-          {/* Quality Standard Field */}
           <div>
-            <label htmlFor="qualityStandard" className={labelClass}>
-              Quality Standard
-            </label>
+            <label htmlFor="contract_terms.quality_standard" className={labelClass}>Quality Standard</label>
             <input
-              id="qualityStandard"
-              name="qualityStandard"
-              value={formData.qualityStandard}
+              id="contract_terms.quality_standard"
+              name="contract_terms.quality_standard"
+              value={formData.contract_terms.quality_standard}
               onChange={handleInputChange}
               placeholder="e.g., ISO9001"
               className={inputClass}
@@ -200,12 +136,11 @@ export const NewSupplier = () => {
             />
           </div>
 
-          {/* Submit Button */}
           <button
             type="submit"
             className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
           >
-            Submit
+            Add Supplier
           </button>
         </form>
       </div>

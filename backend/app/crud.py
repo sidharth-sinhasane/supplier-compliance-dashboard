@@ -23,23 +23,15 @@ def create_supplier(db: Session, supplier: SupplierCreate) -> Supplier:
 def get_supplier(db: Session, supplier_id: int) -> Supplier:
     return db.query(Supplier).filter(Supplier.id == supplier_id).first()
 
-def create_compliance_record(db: Session, compliance_record: ComplianceRecordCreate) -> ComplianceRecord:
-    db_record = ComplianceRecord(**compliance_record.dict())
+def create_compliance_record(db: Session, compliance_data: ComplianceRecordCreate):
+    db_record = ComplianceRecord(**compliance_data.dict())
     db.add(db_record)
     db.commit()
     db.refresh(db_record)
-    
-    # Update supplier's compliance score
-    supplier = get_supplier(db, compliance_record.supplier_id)
-    supplier.compliance_score = calculate_compliance_score(db, supplier.id)
-    supplier.last_audit = date.today()
-    db.commit()
-    
-    # Analyze compliance using AI
-    analysis = analyze_compliance_data(db_record.dict())
-    # Here you might want to store the analysis or update the record
-    
     return db_record
+
+def get_compliance_records(db: Session, supplier_id: int):
+    return db.query(ComplianceRecord).filter(ComplianceRecord.supplier_id == supplier_id).all()
 
 def calculate_compliance_score(db: Session, supplier_id: int) -> int:
     records = db.query(ComplianceRecord).filter(ComplianceRecord.supplier_id == supplier_id).all()

@@ -9,11 +9,20 @@ from typing import Dict
 models.Base.metadata.create_all(bind=engine)
 from fastapi.encoders import jsonable_encoder
 from pydantic import ValidationError
+from fastapi.middleware.cors import CORSMiddleware
 
 
 
 app = FastAPI()
 
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # Replace with your frontend URL
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 @app.get("/suppliers", response_model=List[schemas.Supplier])
 def read_suppliers(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     suppliers = crud.get_suppliers(db, skip=skip, limit=limit)
@@ -38,14 +47,13 @@ def read_supplier(supplier_id: int, db: Session = Depends(get_db)):
 
 @app.post("/suppliers/check-compliance", response_model=Dict[str, int])
 async def check_compliance(compliance_data: schemas.ComplianceRecordCreate, db: Session = Depends(get_db)):
-    # Store the new compliance record
-    crud.create_compliance_record(db, compliance_data)
+    new_record = crud.create_compliance_record(db, compliance_data)
     
     # Retrieve all compliance records for the supplier
     supplier_records = crud.get_compliance_records(db, compliance_data.supplier_id)
     
     # Analyze compliance data using the LLM
-    categorized_issues = analyze_compliance_data(supplier_records)
+    categorized_issues = analyze_compliance_data([new_record] + supplier_records)
     
     return categorized_issues
 
