@@ -35,7 +35,7 @@ def analyze_compliance_data(compliance_records: List[ComplianceRecord]) -> Dict[
     
     multi_line_string = '\n'.join(data_for_analysis)
 
-    system_prompt = """I want you to analyze given compliance records for the supplier and identify patterns in non-compliance status. Provide categorized issues (e.g., 'delivery delays', 'quality inconsistencies') output as a json with categorized issues as keys and counts as values for those keys."""
+    system_prompt = """I want you to analyze given compliance records for the supplier and identify patterns in only non-compliance status. Provide categorized issues (e.g., 'delivery delays', 'quality inconsistencies') output as a json with categorized issues as keys and counts as values for those keys. Dont give me nested JSON output"""
     messages = [
         {"role": "system", "content": system_prompt},
         {"role": "user", "content": multi_line_string}

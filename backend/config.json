@@ -1,3 +1,0 @@
-{
-    "SQLALCHEMY_DATABASE_URL" : "postgresql://postgres:Aish@4125@localhost/supplier_compliance"
-}

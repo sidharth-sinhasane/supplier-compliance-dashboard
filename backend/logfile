@@ -60,3 +60,122 @@
 2025-01-17 22:15:27.645 EST [172323] LOG:  checkpoint complete: wrote 6 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.531 s, sync=0.004 s, total=0.602 s; sync files=6, longest=0.004 s, average=0.001 s; distance=2 kB, estimate=979 kB; lsn=0/1A1AB60, redo lsn=0/1A1AB08
 2025-01-17 22:20:27.745 EST [172323] LOG:  checkpoint starting: time
 2025-01-17 22:20:28.311 EST [172323] LOG:  checkpoint complete: wrote 6 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.535 s, sync=0.004 s, total=0.566 s; sync files=6, longest=0.004 s, average=0.001 s; distance=2 kB, estimate=881 kB; lsn=0/1A1B650, redo lsn=0/1A1B5C0
+2025-01-18 01:15:30.306 EST [172323] LOG:  checkpoint starting: time
+2025-01-18 01:15:31.251 EST [172323] LOG:  checkpoint complete: wrote 10 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.921 s, sync=0.004 s, total=0.946 s; sync files=10, longest=0.003 s, average=0.001 s; distance=3 kB, estimate=793 kB; lsn=0/1A1C5F0, redo lsn=0/1A1C598
+2025-01-18 04:00:32.926 EST [172323] LOG:  checkpoint starting: time
+2025-01-18 04:00:33.474 EST [172323] LOG:  checkpoint complete: wrote 6 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.519 s, sync=0.004 s, total=0.549 s; sync files=6, longest=0.003 s, average=0.001 s; distance=2 kB, estimate=714 kB; lsn=0/1A1CF30, redo lsn=0/1A1CED8
+2025-01-18 04:01:50.186 EST [168274] ERROR:  update or delete on table "suppliers" violates foreign key constraint "compliance_records_supplier_id_fkey" on table "compliance_records"
+2025-01-18 04:01:50.186 EST [168274] DETAIL:  Key (id)=(2) is still referenced from table "compliance_records".
+2025-01-18 04:01:50.186 EST [168274] STATEMENT:  delete from suppliers;
+2025-01-18 04:05:32.573 EST [172323] LOG:  checkpoint starting: time
+2025-01-18 04:05:32.795 EST [172323] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.206 s, sync=0.003 s, total=0.222 s; sync files=3, longest=0.002 s, average=0.001 s; distance=2 kB, estimate=643 kB; lsn=0/1A1DA30, redo lsn=0/1A1D9D8
+2025-01-18 04:10:32.895 EST [172323] LOG:  checkpoint starting: time
+2025-01-18 04:10:33.419 EST [172323] LOG:  checkpoint complete: wrote 6 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.507 s, sync=0.004 s, total=0.525 s; sync files=6, longest=0.004 s, average=0.001 s; distance=3 kB, estimate=579 kB; lsn=0/1A1E640, redo lsn=0/1A1E5E8
+2025-01-18 04:20:32.587 EST [172323] LOG:  checkpoint starting: time
+2025-01-18 04:20:33.108 EST [172323] LOG:  checkpoint complete: wrote 6 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.508 s, sync=0.003 s, total=0.522 s; sync files=6, longest=0.003 s, average=0.001 s; distance=4 kB, estimate=522 kB; lsn=0/1A1F988, redo lsn=0/1A1F930
+2025-01-18 04:23:31.323 EST [168274] ERROR:  invalid input syntax for type double precision: "Fail"
+2025-01-18 04:23:31.323 EST [168274] CONTEXT:  COPY compliance_records, line 2, column result: "Fail"
+2025-01-18 04:23:31.323 EST [168274] STATEMENT:  COPY  compliance_records ( id, supplier_id, metric, date_recorded, result, status ) FROM STDIN DELIMITER ',' CSV HEADER;
+2025-01-18 04:25:35.737 EST [168274] ERROR:  insert or update on table "compliance_records" violates foreign key constraint "compliance_records_supplier_id_fkey"
+2025-01-18 04:25:35.737 EST [168274] DETAIL:  Key (supplier_id)=(3) is not present in table "suppliers".
+2025-01-18 04:25:35.737 EST [168274] STATEMENT:  COPY  compliance_records ( id, supplier_id, metric, date_recorded, result, status ) FROM STDIN DELIMITER ',' CSV HEADER;
+2025-01-18 04:27:30.188 EST [168274] ERROR:  invalid input syntax for type integer: "{'delivery_time': 'within 7 days', 'quality_standard': 'ISO9001', 'discount_rate': 5}"
+2025-01-18 04:27:30.188 EST [168274] CONTEXT:  COPY suppliers, line 2, column compliance_score: "{'delivery_time': 'within 7 days', 'quality_standard': 'ISO9001', 'discount_rate': 5}"
+2025-01-18 04:27:30.188 EST [168274] STATEMENT:  COPY  suppliers ( id, name, country, contract_terms, compliance_score, last_audit ) FROM STDIN DELIMITER ',' CSV HEADER;
+2025-01-18 04:30:00.066 EST [168274] ERROR:  column "compliance_score" cannot be cast automatically to type jsonb
+2025-01-18 04:30:00.066 EST [168274] HINT:  You might need to specify "USING compliance_score::jsonb".
+2025-01-18 04:30:00.066 EST [168274] STATEMENT:  ALTER TABLE suppliers
+	ALTER COLUMN compliance_score SET DATA TYPE JSONB;
+2025-01-18 04:30:32.213 EST [172323] LOG:  checkpoint starting: time
+2025-01-18 04:30:35.973 EST [172323] LOG:  checkpoint complete: wrote 38 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=3.734 s, sync=0.005 s, total=3.761 s; sync files=30, longest=0.003 s, average=0.001 s; distance=176 kB, estimate=487 kB; lsn=0/1A4BC18, redo lsn=0/1A4BB88
+2025-01-18 04:30:36.314 EST [168274] ERROR:  cannot cast type integer to jsonb at character 95
+2025-01-18 04:30:36.314 EST [168274] STATEMENT:  ALTER TABLE suppliers
+	ALTER COLUMN compliance_score SET DATA TYPE JSONB
+	USING compliance_score::jsonb;
+2025-01-18 04:32:06.561 EST [168274] ERROR:  invalid input syntax for type json
+2025-01-18 04:32:06.561 EST [168274] DETAIL:  Token "'" is invalid.
+2025-01-18 04:32:06.561 EST [168274] CONTEXT:  JSON data, line 1: {'...
+	COPY suppliers, line 2, column compliance_score: "{'delivery_time': 'within 7 days', 'quality_standard': 'ISO9001', 'discount_rate': 5}"
+2025-01-18 04:32:06.561 EST [168274] STATEMENT:  COPY  suppliers ( id, name, country, contract_terms, compliance_score, last_audit ) FROM STDIN DELIMITER ',' CSV HEADER;
+2025-01-18 04:32:27.546 EST [168274] ERROR:  column "compliance_score" cannot be cast automatically to type integer
+2025-01-18 04:32:27.546 EST [168274] HINT:  You might need to specify "USING compliance_score::integer".
+2025-01-18 04:32:27.546 EST [168274] STATEMENT:  ALTER TABLE suppliers
+	ALTER COLUMN compliance_score SET DATA TYPE INTEGER;
+2025-01-18 04:35:32.980 EST [172323] LOG:  checkpoint starting: time
+2025-01-18 04:35:37.663 EST [172323] LOG:  checkpoint complete: wrote 47 buffers (0.3%); 0 WAL file(s) added, 0 removed, 0 recycled; write=4.630 s, sync=0.026 s, total=4.683 s; sync files=46, longest=0.020 s, average=0.001 s; distance=242 kB, estimate=463 kB; lsn=0/1A88680, redo lsn=0/1A885F0
+2025-01-18 04:37:37.684 EST [108744] ERROR:  duplicate key value violates unique constraint "compliance_records_pkey"
+2025-01-18 04:37:37.684 EST [108744] DETAIL:  Key (id)=(13) already exists.
+2025-01-18 04:37:37.684 EST [108744] STATEMENT:  INSERT INTO compliance_records (supplier_id, metric, date_recorded, result, status) VALUES (3, 'quality', '2024-08-05'::date, 'Fail', 'Pass') RETURNING compliance_records.id
+2025-01-18 04:39:30.999 EST [108744] ERROR:  duplicate key value violates unique constraint "compliance_records_pkey"
+2025-01-18 04:39:30.999 EST [108744] DETAIL:  Key (id)=(14) already exists.
+2025-01-18 04:39:30.999 EST [108744] STATEMENT:  INSERT INTO compliance_records (supplier_id, metric, date_recorded, result, status) VALUES (3, 'quality', '2024-08-05'::date, 'Fail', 'compliant') RETURNING compliance_records.id
+2025-01-18 04:40:32.763 EST [172323] LOG:  checkpoint starting: time
+2025-01-18 04:40:32.981 EST [172323] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.205 s, sync=0.003 s, total=0.218 s; sync files=3, longest=0.003 s, average=0.001 s; distance=7 kB, estimate=417 kB; lsn=0/1A8A4D0, redo lsn=0/1A8A478
+2025-01-18 04:43:15.739 EST [108744] ERROR:  duplicate key value violates unique constraint "compliance_records_pkey"
+2025-01-18 04:43:15.739 EST [108744] DETAIL:  Key (id)=(15) already exists.
+2025-01-18 04:43:15.739 EST [108744] STATEMENT:  INSERT INTO compliance_records (supplier_id, metric, date_recorded, result, status) VALUES (3, 'quality', '2024-09-17'::date, 'Fail', 'compliant') RETURNING compliance_records.id
+2025-01-18 04:45:33.081 EST [172323] LOG:  checkpoint starting: time
+2025-01-18 04:45:34.309 EST [172323] LOG:  checkpoint complete: wrote 13 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=1.211 s, sync=0.005 s, total=1.229 s; sync files=12, longest=0.005 s, average=0.001 s; distance=42 kB, estimate=379 kB; lsn=0/1A94CD0, redo lsn=0/1A94C78
+2025-01-18 04:50:33.380 EST [172323] LOG:  checkpoint starting: time
+2025-01-18 04:50:33.806 EST [172323] LOG:  checkpoint complete: wrote 5 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.409 s, sync=0.003 s, total=0.427 s; sync files=5, longest=0.002 s, average=0.001 s; distance=11 kB, estimate=343 kB; lsn=0/1A97CC8, redo lsn=0/1A97C70
+2025-01-18 05:13:14.813 EST [112660] ERROR:  duplicate key value violates unique constraint "suppliers_pkey"
+2025-01-18 05:13:14.813 EST [112660] DETAIL:  Key (id)=(11) already exists.
+2025-01-18 05:13:14.813 EST [112660] STATEMENT:  INSERT INTO suppliers (name, country, contract_terms, compliance_score, last_audit) VALUES ('Supplier_1', 'China', '{"delivery_time": "within 7 days", "quality_standard": "ISO9001", "discount_rate": 5}'::JSONB, 84, '2024-03-29'::date) RETURNING suppliers.id
+2025-01-18 05:13:41.793 EST [112660] ERROR:  duplicate key value violates unique constraint "suppliers_pkey"
+2025-01-18 05:13:41.793 EST [112660] DETAIL:  Key (id)=(12) already exists.
+2025-01-18 05:13:41.793 EST [112660] STATEMENT:  INSERT INTO suppliers (name, country, contract_terms, compliance_score, last_audit) VALUES ('Supplier_0', 'China', '{"delivery_time": "within 7 days", "quality_standard": "ISO9001", "discount_rate": 5}'::JSONB, 84, '2024-03-29'::date) RETURNING suppliers.id
+2025-01-18 05:15:16.197 EST [168274] ERROR:  relation "supplier_data" does not exist
+2025-01-18 05:15:16.197 EST [168274] STATEMENT:  ALTER TABLE supplier_data
+	DROP CONSTRAINT suppliers_pkey;
+2025-01-18 05:15:27.234 EST [168274] ERROR:  cannot drop constraint suppliers_pkey on table suppliers because other objects depend on it
+2025-01-18 05:15:27.234 EST [168274] DETAIL:  constraint compliance_records_supplier_id_fkey on table compliance_records depends on index suppliers_pkey
+2025-01-18 05:15:27.234 EST [168274] HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+2025-01-18 05:15:27.234 EST [168274] STATEMENT:  ALTER TABLE suppliers
+	DROP CONSTRAINT suppliers_pkey;
+2025-01-18 05:15:34.197 EST [172323] LOG:  checkpoint starting: time
+2025-01-18 05:15:34.428 EST [172323] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.207 s, sync=0.003 s, total=0.231 s; sync files=3, longest=0.002 s, average=0.001 s; distance=3 kB, estimate=309 kB; lsn=0/1A98A10, redo lsn=0/1A989B8
+2025-01-18 05:16:28.482 EST [168274] ERROR:  syntax error at or near "cascade" at character 8
+2025-01-18 05:16:28.482 EST [168274] STATEMENT:  delete cascade from supplier where supplier
+	;
+2025-01-18 05:16:54.810 EST [168274] ERROR:  syntax error at or near "cascade" at character 8
+2025-01-18 05:16:54.810 EST [168274] STATEMENT:  delete cascade from supplier where id = 1;
+2025-01-18 05:17:21.846 EST [168274] ERROR:  syntax error at or near "CASCADE" at character 35
+2025-01-18 05:17:21.846 EST [168274] STATEMENT:  DELETE FROM supplier WHERE id = 1 CASCADE;
+2025-01-18 05:17:55.420 EST [168274] ERROR:  relation "supplier" does not exist at character 13
+2025-01-18 05:17:55.420 EST [168274] STATEMENT:  DELETE FROM supplier WHERE id = 1;
+2025-01-18 05:18:02.313 EST [168274] ERROR:  update or delete on table "suppliers" violates foreign key constraint "compliance_records_supplier_id_fkey" on table "compliance_records"
+2025-01-18 05:18:02.313 EST [168274] DETAIL:  Key (id)=(1) is still referenced from table "compliance_records".
+2025-01-18 05:18:02.313 EST [168274] STATEMENT:  DELETE FROM suppliers WHERE id = 1;
+2025-01-18 05:18:56.612 EST [112660] ERROR:  duplicate key value violates unique constraint "suppliers_pkey"
+2025-01-18 05:18:56.612 EST [112660] DETAIL:  Key (id)=(13) already exists.
+2025-01-18 05:18:56.612 EST [112660] STATEMENT:  INSERT INTO suppliers (name, country, contract_terms, compliance_score, last_audit) VALUES ('Supplier_1', 'China', '{"delivery_time": "within 7 days", "quality_standard": "ISO9001", "discount_rate": 5}'::JSONB, 84, '2024-03-29'::date) RETURNING suppliers.id
+2025-01-18 05:19:38.525 EST [112660] ERROR:  duplicate key value violates unique constraint "suppliers_pkey"
+2025-01-18 05:19:38.525 EST [112660] DETAIL:  Key (id)=(14) already exists.
+2025-01-18 05:19:38.525 EST [112660] STATEMENT:  INSERT INTO suppliers (name, country, contract_terms, compliance_score, last_audit) VALUES ('Supplier_1', 'China', '{"delivery_time": "within 7 days", "quality_standard": "ISO9001", "discount_rate": 5}'::JSONB, 84, '2024-03-29'::date) RETURNING suppliers.id
+2025-01-18 05:20:34.462 EST [172323] LOG:  checkpoint starting: time
+2025-01-18 05:20:34.786 EST [172323] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.308 s, sync=0.003 s, total=0.325 s; sync files=4, longest=0.002 s, average=0.001 s; distance=11 kB, estimate=279 kB; lsn=0/1A9B708, redo lsn=0/1A9B6B0
+2025-01-18 05:25:34.887 EST [172323] LOG:  checkpoint starting: time
+2025-01-18 05:25:35.830 EST [172323] LOG:  checkpoint complete: wrote 10 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.919 s, sync=0.006 s, total=0.944 s; sync files=11, longest=0.004 s, average=0.001 s; distance=35 kB, estimate=254 kB; lsn=0/1AA4328, redo lsn=0/1AA42D0
+2025-01-18 05:30:34.930 EST [172323] LOG:  checkpoint starting: time
+2025-01-18 05:30:35.450 EST [172323] LOG:  checkpoint complete: wrote 6 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.506 s, sync=0.003 s, total=0.521 s; sync files=6, longest=0.002 s, average=0.001 s; distance=5 kB, estimate=230 kB; lsn=0/1AA59C0, redo lsn=0/1AA5968
+2025-01-18 05:31:22.258 EST [168274] ERROR:  duplicate key value violates unique constraint "suppliers_pkey"
+2025-01-18 05:31:22.258 EST [168274] DETAIL:  Key (id)=(1) already exists.
+2025-01-18 05:31:22.258 EST [168274] CONTEXT:  COPY suppliers, line 2
+2025-01-18 05:31:22.258 EST [168274] STATEMENT:  COPY  suppliers ( id, name, country, compliance_score, contract_terms, last_audit ) FROM STDIN DELIMITER ',' CSV HEADER;
+2025-01-18 05:35:34.550 EST [172323] LOG:  checkpoint starting: time
+2025-01-18 05:35:35.680 EST [172323] LOG:  checkpoint complete: wrote 12 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=1.112 s, sync=0.004 s, total=1.130 s; sync files=11, longest=0.003 s, average=0.001 s; distance=45 kB, estimate=211 kB; lsn=0/1AB0F38, redo lsn=0/1AB0EE0
+2025-01-18 05:40:34.693 EST [172323] LOG:  checkpoint starting: time
+2025-01-18 05:40:35.816 EST [172323] LOG:  checkpoint complete: wrote 12 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=1.109 s, sync=0.004 s, total=1.124 s; sync files=9, longest=0.004 s, average=0.001 s; distance=51 kB, estimate=195 kB; lsn=0/1ABDC48, redo lsn=0/1ABDBF0
+2025-01-18 05:44:01.164 EST [168274] ERROR:  syntax error at or near "10" at character 25
+2025-01-18 05:44:01.164 EST [168274] STATEMENT:  select * from suppliers 10;
+2025-01-18 05:44:19.366 EST [168274] ERROR:  syntax error at or near "clear" at character 1
+2025-01-18 05:44:19.366 EST [168274] STATEMENT:  clear
+	;
+2025-01-18 05:44:31.980 EST [127462] ERROR:  relation "suppliers" does not exist at character 15
+2025-01-18 05:44:31.980 EST [127462] STATEMENT:  select * from suppliers limit 10;
+2025-01-18 05:44:58.618 EST [127462] ERROR:  relation "compliance_record" does not exist at character 15
+2025-01-18 05:44:58.618 EST [127462] STATEMENT:  select * from compliance_record limit 10;
+2025-01-18 05:45:28.570 EST [127462] ERROR:  relation "compliance_record" does not exist at character 15
+2025-01-18 05:45:28.570 EST [127462] STATEMENT:  select * from compliance_record;
+2025-01-18 05:46:01.914 EST [127462] ERROR:  relation "compliance_record" does not exist at character 15
+2025-01-18 05:46:01.914 EST [127462] STATEMENT:  select * from compliance_record;

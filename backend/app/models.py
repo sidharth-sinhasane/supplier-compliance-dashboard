@@ -21,6 +21,6 @@ class ComplianceRecord(Base):
     supplier_id = Column(Integer, ForeignKey("suppliers.id"))
     metric = Column(String)
     date_recorded = Column(Date)
-    result = Column(Float)
+    result = Column(String)
     status = Column(String)
     supplier = relationship("Supplier", back_populates="compliance_records")

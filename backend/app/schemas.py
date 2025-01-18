@@ -6,7 +6,7 @@ from pydantic import BaseModel, ConfigDict
 class ComplianceRecordBase(BaseModel):
     metric: str
     date_recorded: date
-    result: float
+    result: str
     status: str
 
 class ComplianceRecordCreate(ComplianceRecordBase):
