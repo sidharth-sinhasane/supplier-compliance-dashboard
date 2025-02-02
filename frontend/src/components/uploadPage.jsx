@@ -83,8 +83,109 @@ export const UploadPage = () => {
         <h2 className="text-2xl font-bold text-center mb-6">Compliance Data Entry</h2>
         
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Form fields remain the same */}
-          {/* ... */}
+        <div>
+            <label htmlFor="supplierId" className={labelClass}>
+              Supplier ID
+            </label>
+            <input
+              id="supplierId"
+              name="supplierId"
+              type="number"
+              value={formData.supplierId}
+              onChange={handleInputChange}
+              placeholder="Enter supplier ID"
+              className={inputClass}
+              required
+            />
+          </div>
+
+          {/* Metric Selection */}
+          <div>
+            <label htmlFor="metric" className={labelClass}>
+              Metric Type
+            </label>
+            <select
+              id="metric"
+              name="metric"
+              value={formData.metric}
+              onChange={handleInputChange}
+              className={inputClass}
+              required
+            >
+              <option value="delivery">Delivery Time</option>
+              <option value="quality">Quality</option>
+            </select>
+          </div>
+
+          {formData.metric === 'delivery' ? (
+            <>
+              {/* Order Date Field */}
+              <div>
+                <label htmlFor="orderDate" className={labelClass}>
+                  Order Date
+                </label>
+                <input
+                  id="orderDate"
+                  name="orderDate"
+                  type="date"
+                  value={formData.orderDate}
+                  onChange={handleInputChange}
+                  className={inputClass}
+                  required
+                />
+              </div>
+
+              {/* Delivery Date Field */}
+              <div>
+                <label htmlFor="deliveryDate" className={labelClass}>
+                  Delivery Date
+                </label>
+                <input
+                  id="deliveryDate"
+                  name="deliveryDate"
+                  type="date"
+                  value={formData.deliveryDate}
+                  onChange={handleInputChange}
+                  className={inputClass}
+                  required
+                />
+              </div>
+
+              {/* Delivery City Field */}
+              <div>
+                <label htmlFor="deliveryCity" className={labelClass}>
+                  Delivery City
+                </label>
+                <input
+                  id="deliveryCity"
+                  name="deliveryCity"
+                  value={formData.deliveryCity}
+                  onChange={handleInputChange}
+                  placeholder="Enter delivery city"
+                  className={inputClass}
+                  required
+                />
+              </div>
+            </>
+          ) : (
+            /* Quality Result Field */
+            <div>
+              <label htmlFor="qualityResult" className={labelClass}>
+                Quality Result
+              </label>
+              <select
+                id="qualityResult"
+                name="qualityResult"
+                value={formData.qualityResult}
+                onChange={handleInputChange}
+                className={inputClass}
+                required
+              >
+                <option value="pass">Pass</option>
+                <option value="fail">Fail</option>
+              </select>
+            </div>
+          )}
 
           <button
             type="submit"
